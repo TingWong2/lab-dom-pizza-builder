@@ -30,6 +30,18 @@ function renderEverything() {
 
   renderButtons();
   renderPrice();
+
+  let ingredientUlTag = document.getElementById("ingredient-list"); 
+  ingredientUlTag.innerHTML = ''
+
+  for ( const property in state ) {
+    if (state[property]) {
+      let ingredientLiTag = document.createElement("li"); 
+      ingredientLiTag.innerHTML = ` $ ${ingredients[property].price} ${ingredients[property].name}` 
+      ingredientUlTag.appendChild(ingredientLiTag)
+    }
+  }
+
 }
 
 function renderPepperoni() {
@@ -87,12 +99,38 @@ function renderGlutenFreeCrust() {
 
 function renderButtons() {
   // Iteration 3: add/remove the class "active" of each `<button class="btn">`
+  
+  for (const property in state) {
 
+    const dashedCase = property.replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+    const buttonTag = document.querySelector('.btn-' + dashedCase)
+    
+      console.log("buttonTag", property, buttonTag)
+
+    if (state[property]) {
+      buttonTag.classList.add("active")
+    } else {
+      buttonTag.classList.remove("active")
+    }
+  }
+    
 };
 
 
 function renderPrice() {
-  // Iteration 4: change the HTML of `<aside class="panel price">`
+  
+  console.log("renderPrice state", state)
+
+  // check the properties in state:
+  let finalPrice = basePrice
+  for ( const property in state ) {
+    if (state[property]) {
+      finalPrice += ingredients[property].price
+    }
+  }
+   
+  let totalPizzaPriceTag = document.getElementById("total-pizza-price"); 
+  totalPizzaPriceTag.innerHTML = `$ ${finalPrice}`
 };
 
 renderEverything();
@@ -116,12 +154,12 @@ document.querySelector('.btn.btn-green-peppers').addEventListener('click', funct
 
 // Iteration 2: Add click event listener on `<button class="btn btn-sauce">`
 
-document.querySelector('.btn.btn-sauce').addEventListener('click', function(){
+document.querySelector('.btn.btn-white-sauce').addEventListener('click', function(){
   state.whiteSauce = !state.whiteSauce;
   renderEverything();
 }); 
 // Iteration 2: Add click event listener on `<button class="btn btn-crust">`
-document.querySelector('.btn.btn-crust').addEventListener('click', function(){
+document.querySelector('.btn.btn-gluten-free-crust').addEventListener('click', function(){
   state.glutenFreeCrust = !state.glutenFreeCrust;
   renderEverything();
 });
